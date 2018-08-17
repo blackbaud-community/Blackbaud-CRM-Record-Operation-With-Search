@@ -179,7 +179,7 @@ The main function is where we process the action itself. We begin a screen wait 
 We then create an object for the parameter we are setting in the add form, Queries, specifying that it is a collection of the records array we created. Then, we call the open dialog for the add form, specifying event handlers we created earlier for showing and saving the form.
 Finally, we execute the main function which calls all the rest of the code.
 ### The Information Library Page
-We’re almost there! Now we just need to modify the page to call our JavaScript action.
+We're almost there! Now we just need to modify the page to call our JavaScript action.
 
 ``` xml
 <Action ID="0E96CC61-EFD6-4462-BC2A-593C93423223" Caption="Move" ImageKey="RES:recordoperationspec" Visible="=Fields!GROUPEDBY=0" Enabled="=(Fields!OTHERSCANMODIFY orelse Globals.CurrentAppUserIsSysAdmin() orelse String.Compare(Globals.CurrentAppUserID.toString, Fields!OWNERID, True) = 0)" CaptionResourceKey="$$move">
@@ -202,4 +202,4 @@ We’re almost there! Now we just need to modify the page to call our JavaScript a
 ```
 
 First, we create the action. We give it the record operation image so that it has the look and feel of a record operation. For the action itself, we specify a JavaScript CLR Action. We point it to the folder where we have our JavaScript file saved. You will want to use your customizations folder and not our information library folder. We also specify the action that we declared in the JavaScript file. Finally, we specify the context as the record(s) selected by the user.
-That’s it! Now, we have a "record operation" that takes in a search as input.
+That's it! Now, we have a "record operation" that takes in a search as input.
