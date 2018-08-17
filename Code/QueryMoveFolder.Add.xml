@@ -1,0 +1,107 @@
+<AddDataFormTemplateSpec 
+    xmlns="bb_appfx_adddataformtemplate"
+    xmlns:common="bb_appfx_commontypes"
+    ID="5817022f-0983-4e6d-ac32-f521d27ee120"
+    Name="Query Move Folder Add Data Form"
+    Description="Moves multiple queries into a new folder"
+    Author="Blackbaud Product Development"
+    DataFormInstanceID="7f97d246-b859-4106-be70-47ed87f1434e"
+    RecordType="Query"
+    common:SecurityUIFolder="Information Library"
+    FormHeader="Move queries to folder"
+    FormHeaderResourceKey="$$move_queries_to_folder"
+		NoSecurityRequired="true"
+		SecurityUIDisplayFeature="false"				
+    HelpKey="DATAManageQueryFolders.html"
+    >
+
+	<ResourceFile AssemblyName="Blackbaud.AppFx.Platform.Catalog.dll" ClassName="Blackbaud.AppFx.Platform.Catalog.QueryMoveFolder.Add" />
+
+    <SPDataForm>
+
+		<SaveImplementation SPName="USP_DATAFORMTEMPLATE_ADD_QUERYMOVEFOLDER">
+			<common:CreateProcedureSQL>
+				<![CDATA[
+create procedure dbo.USP_DATAFORMTEMPLATE_ADD_QUERYMOVEFOLDER
+(
+	@ID uniqueidentifier output,
+	@CHANGEAGENTID uniqueidentifier = null,
+	@FOLDERID uniqueidentifier = null,
+	@QUERIES xml = null
+)
+as
+
+set nocount on;
+
+if @ID is null
+  set @ID = newid()
+
+if @CHANGEAGENTID is null  
+    exec dbo.USP_CHANGEAGENT_GETORCREATECHANGEAGENT @CHANGEAGENTID output
+
+declare @CURRENTDATE datetime
+set @CURRENTDATE = getdate()
+
+begin try
+
+		-- move ad-hoc queries
+		update dbo.[ADHOCQUERY] set
+			[FOLDERID] = @FOLDERID,
+			[CHANGEDBYID] = @CHANGEAGENTID,
+			[DATECHANGED] = @CURRENTDATE
+		where [ID] in
+    (
+      select
+      T.c.value('(ID)[1]','uniqueidentifier') AS 'ID'
+      from @QUERIES.nodes('/QUERIES/ITEM') T(c)
+    )
+
+		-- move smart query instances
+		update dbo.[SMARTQUERYINSTANCE] set
+			[FOLDERID] = @FOLDERID,
+			[CHANGEDBYID] = @CHANGEAGENTID,
+			[DATECHANGED] = @CURRENTDATE
+		where [ID] in
+    (
+      select
+      T.c.value('(ID)[1]','uniqueidentifier') AS 'ID'
+      from @QUERIES.nodes('/QUERIES/ITEM') T(c)
+    )
+	
+end try
+
+begin catch
+    exec dbo.USP_RAISE_ERROR
+    return 1
+end catch
+
+return 0				
+				]]>
+			</common:CreateProcedureSQL>
+		</SaveImplementation>
+	</SPDataForm>
+
+	<common:FormMetaData>
+		<common:FormFields>
+      <common:FormField FieldID="FOLDERID" Caption="Folder" DataType="Guid" CaptionResourceKey="$$folder">
+        <common:SimpleDataList SimpleDataListID="53e41bf1-7423-4d7f-897f-0d9d2efadfcd" />
+      </common:FormField>
+      <common:FormField FieldID="QUERIES" Caption="Queries" DataType="XML" Hidden="true">
+        <common:Collection>
+          <common:Fields>
+            <common:FormField FieldID="ID" DataType="Guid" />
+          </common:Fields>
+        </common:Collection>
+      </common:FormField>
+		</common:FormFields>
+
+    <common:WebUIComponent>
+        <common:UIModel AssemblyName="Blackbaud.AppFx.Platform.UIModel.dll" ClassName="Blackbaud.AppFx.Platform.UIModel.QueryMoveFolderAddDataFormUIModel" />
+        <common:WebUI>
+            <common:ExternalResource Url="browser/htmlforms/platform/informationlibrary/QueryMoveFolderAddDataForm.html" />
+        </common:WebUI>
+    </common:WebUIComponent>
+
+	</common:FormMetaData>
+
+</AddDataFormTemplateSpec>
