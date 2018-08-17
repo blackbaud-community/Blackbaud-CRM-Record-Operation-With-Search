@@ -15,19 +15,21 @@ Loading customizations is covered in our [SDK Guide](https://www.blackbaud.com/f
 ## Moving Multiple Queries to a New Folder
 The Infinity Technical Reference has a section on the [BBUI API](https://www.blackbaud.com/files/support/guides/infinitytechref/Content/apidocs-BB_4-0/index.html). It shows accessible functions from JavaScript and examples on how to use them. Instead of writing a new code sample, we will demonstrate functionality from the Information Library page.
 In this example, a user has mistakenly put a few revenue queries into a constituent folder. We would like to move those to the revenue folder. So, we select those queries and choose the Move operation.
-![Image showing move action selected](username.github.com/repository/img/image.jpg)
+
+![Image showing move action selected](https://github.com/Blackbaud-DavidHendershot/Blackbaud-CRM-Record-Operation-With-Search/blob/master/Resources/Move%20action.png)
 
 This opens a form which allows us to choose the new folder for those queries.
-![Image showing Query Move Folder Add Data Form](username.github.com/repository/img/image.jpg)
+
+![Image showing Query Move Folder Add Data Form](https://github.com/Blackbaud-DavidHendershot/Blackbaud-CRM-Record-Operation-With-Search/blob/master/Resources/Move%20add%20form.png)
 
 After pressing save, the queries are relocated to the correct folder.
 
-![Image showing queries after being moved](username.github.com/repository/img/image.jpg)
+![Image showing queries after being moved](https://github.com/Blackbaud-DavidHendershot/Blackbaud-CRM-Record-Operation-With-Search/blob/master/Resources/Moved%20queries.png)
 
 ## Writing the Code
-To create this “record operation”, take the following steps. First, create the add form that will take in the queries and the new folder and reassign them. Second, write the JavaScript action to open the add form. Finally, add the JavaScript action to the page.
+To create this "record operation", take the following steps. First, create the add form that will take in the queries and the new folder and reassign them. Second, write the JavaScript action to open the add form. Finally, add the JavaScript action to the page.
 ### Query Move Folder Add Data Form
-The first question you may ask is, “why an add form?” This is a fair question, as the change we are making is more akin to an edit action or record operation. We are not using an edit action because edit actions usually focus on a single record and we are not calling a function to load the information we want to edit. We cannot choose a record operation because it will not allow us to show a UI. Hence, we use an add form.
+The first question you may ask is, "why an add form?" This is a fair question, as the change we are making is more akin to an edit action or record operation. We are not using an edit action because edit actions usually focus on a single record and we are not calling a function to load the information we want to edit. We cannot choose a record operation because it will not allow us to show a UI. Hence, we use an add form.
 
 ``` sql
 create procedure dbo.USP_DATAFORMTEMPLATE_ADD_QUERYMOVEFOLDER
@@ -123,7 +125,7 @@ First, we declare our custom action, creating a namespace and then adding an act
             }
 ``` 
  
-Next, we create our handlers for when the add form is shown and the add form is saved. The first function ends the screen wait. The second function calls the save operation when the users presses “save”.
+Next, we create our handlers for when the add form is shown and the add form is saved. The first function ends the screen wait. The second function calls the save operation when the users presses "save".
 
 ``` javascript
             function main() {
@@ -200,4 +202,4 @@ We’re almost there! Now we just need to modify the page to call our JavaScript a
 ```
 
 First, we create the action. We give it the record operation image so that it has the look and feel of a record operation. For the action itself, we specify a JavaScript CLR Action. We point it to the folder where we have our JavaScript file saved. You will want to use your customizations folder and not our information library folder. We also specify the action that we declared in the JavaScript file. Finally, we specify the context as the record(s) selected by the user.
-That’s it! Now, we have a “record operation” that takes in a search as input.
+That’s it! Now, we have a "record operation" that takes in a search as input.
