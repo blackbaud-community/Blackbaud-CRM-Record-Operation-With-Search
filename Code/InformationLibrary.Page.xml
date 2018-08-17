@@ -1,0 +1,637 @@
+<PageDefinitionSpec 
+    xmlns="bb_appfx_pagedefinition"
+    xmlns:c="bb_appfx_commontypes"
+    ID="a5b552bc-d387-47a3-8c35-e36cc2f1af4e"
+    Name="Information Library Page"
+    Description="A page for displaying information about queries, KPIs, and reports."
+    Author="Blackbaud Product Development"
+    HideExplorerBar="True"
+    IsCustomizable="false"
+    >
+
+	<ResourceFile AssemblyName="Blackbaud.AppFx.Platform.Catalog.dll" ClassName="Blackbaud.AppFx.Platform.Catalog.InformationLibrary.Page" />
+
+  <PageHeader Caption="Information Library" ImageKey="CATALOG:Blackbaud.AppFx.Platform.Catalog,Blackbaud.AppFx.Platform.Catalog.info_library_32.png" CaptionResourceKey="$$information_library" />
+
+	<Tabs>
+		<Tab ID="4fff8057-0b45-4759-b150-e5afc1194314" Caption="Queries" LayoutUrl="browser/htmlforms/platform/informationlibrary/informationlibraryquerieslayout.html" CaptionResourceKey="$$queries">
+			<Sections>
+				<Section ID="C3B173FA-9697-403C-9008-8EF5A4B34F60" HideRefresh="true" Caption="Query list" HideCaption="true" CaptionResourceKey="$$query_list">
+					<UIWidget ID="431cb61b-f957-4e25-9f9c-65d80999d5dd" AutoHeight="true" />				
+					<Actions>
+						<Action ID="702B86C4-82BA-4F84-AE3A-F4889A8D40F3" Caption="Manage folders" ImageKey="CATALOG:Blackbaud.AppFx.Platform.Catalog,Blackbaud.AppFx.Platform.Catalog.folder_gear_16.png" CaptionResourceKey="$$manage_folders">
+							<c:ShowDataForm DataFormID="954a9c40-79c7-4f83-aac5-532359a1bec9">
+								<c:PostActionEvent>
+									<c:RefreshPage />
+								</c:PostActionEvent>
+							</c:ShowDataForm>
+						</Action>
+					</Actions>
+				</Section>
+				<Section ID="EA7AD125-FB7D-42E0-A6F1-F5107EEA0764" Caption="Queries" CaptionResourceKey="$$queries">
+					<ListBuilder QueryViewID="2043b264-918e-4c28-8b6c-250b62b0106b" AutoDisplayFilters="true" AllowCancel="true" AllowSave="false">
+						<RequiredColumns>
+							<Column Name="ID" />
+							<Column Name="ISFAVORITE" />						
+							<Column Name="QUERY_TYPE" />
+							<Column Name="ISBROWSABLE" />
+							<Column Name="MOBILIZE" />
+							<Column Name="OWNERID" />
+							<Column Name="USERCANEDIT" />
+							<Column Name="OTHERSCANMODIFY" />
+							<Column Name="GROUPEDBY" />
+						</RequiredColumns>
+						<RenderStyle>
+							<StandardView>
+								<DetailViewForm ViewDataFormID="d1400925-8a10-4796-83eb-15573c50ab56" />
+							</StandardView>				
+						</RenderStyle>
+						<ParameterSection ID="C3B173FA-9697-403C-9008-8EF5A4B34F60">
+							<FieldMappings>
+								<FieldMapping>
+									<ParameterField>NODEID</ParameterField>
+									<DestinationField>NODEID</DestinationField>
+								</FieldMapping>
+								<FieldMapping>
+									<ParameterField>GROUPBY</ParameterField>
+									<DestinationField>GROUPBY</DestinationField>
+								</FieldMapping>
+							</FieldMappings>
+						</ParameterSection>
+					</ListBuilder>
+
+					<Actions>
+						<Action ID="539920A9-72D2-4CE2-898C-35817B675B91" Caption="Favorite" LinkFieldID="FAVORITEPIC" CaptionResourceKey="$$favorite">
+							<c:ExecuteRecordOperation RecordOperationID="4159ea06-c731-466f-95be-843046dd4f5e">
+								<c:ActionContext>
+									<c:SectionField>ID</c:SectionField>
+								</c:ActionContext>
+								<c:ParameterValues>
+									<c:ParameterValue ID="FAVORITE">
+										<c:Value>
+											<c:SectionField>ISFAVORITE</c:SectionField>
+										</c:Value>
+									</c:ParameterValue>
+									<c:ParameterValue ID="QUERYTYPE">
+										<c:Value>
+											<c:SectionField>QUERY_TYPE</c:SectionField>
+										</c:Value>
+									</c:ParameterValue>
+								</c:ParameterValues>
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>C3B173FA-9697-403C-9008-8EF5A4B34F60</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+								</c:ExecuteRecordOperation>
+						</Action>
+						<Action ID="802DA2A7-39A5-414A-B448-9A58980734B1" Caption="View results" LinkFieldID="NAME" Visible="=Fields!QUERY_TYPE = 0" ImageKey="RES:goto_round" DefaultAction="true" AppendSeparator="true" Enabled="=Fields!QUERY_TYPE = 0" CaptionResourceKey="$$view_results">
+							<c:ShowPage PageID="27cf8c30-fbc2-43db-8cd2-9339028d3a68">
+								<c:ActionContext>
+									<c:SectionField>ID</c:SectionField>
+								</c:ActionContext>
+							</c:ShowPage>
+							<HelpKey>DATAQueryViewResults.html</HelpKey>
+						</Action>
+						<Action ID="9C60A31B-36F2-400E-BBA6-BC0F62F0B0A8" Caption="View results" LinkFieldID="NAME" Visible="=Fields!QUERY_TYPE = 1" ImageKey="RES:goto_round" DefaultAction="true" AppendSeparator="true" Enabled="=Fields!QUERY_TYPE = 1" CaptionResourceKey="$$view_results">
+							<c:ShowPage PageID="19546f2a-4b54-476a-a4e9-8fad1f933f29">
+								<c:ActionContext>
+									<c:SectionField>ID</c:SectionField>
+								</c:ActionContext>
+							</c:ShowPage>
+							<HelpKey>DATAQueryViewResults.html</HelpKey>
+						</Action>
+						<Action ID="424c8a74-5d92-49d8-90ae-6f724a880789" Caption="OData link" LinkFieldID="ODATAFEED" DefaultAction="true" CaptionResourceKey="$$odata_link">
+              <c:ExecuteCLRAction>
+                <c:ScriptIdentifier Url="browser/htmlforms/platform/query/QueryODataFeedAction.js" ObjectName="BBUI.customactions.platform.query.QueryODataFeedAction" />
+              </c:ExecuteCLRAction>
+						</Action>
+						<Action ID="0E96CC61-EFD6-4462-BC2A-593C93423223" Caption="Move" ImageKey="RES:recordoperationspec" Visible="=Fields!GROUPEDBY=0" Enabled="=(Fields!OTHERSCANMODIFY orelse Globals.CurrentAppUserIsSysAdmin() orelse String.Compare(Globals.CurrentAppUserID.toString, Fields!OWNERID, True) = 0)" CaptionResourceKey="$$move">
+							<c:ExecuteCLRAction>
+								<c:ScriptIdentifier Url="browser/htmlforms/platform/informationlibrary/QueryMoveFolderAction.js" ObjectName="BBUI.customactions.platform.informationlibrary.QueryMoveFolderAction">
+									<c:AllowsMultiSelect />
+								</c:ScriptIdentifier>
+								<c:ActionContext>
+									<c:SectionField>ID</c:SectionField>
+								</c:ActionContext>
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>C3B173FA-9697-403C-9008-8EF5A4B34F60</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+							</c:ExecuteCLRAction>
+						</Action>
+						<Action ID="7AF90C65-460A-4D44-AD36-F165B06C809E" Caption="Move" ImageKey="RES:recordoperationspec" Visible="=Fields!GROUPEDBY=1" Enabled="=(Fields!OTHERSCANMODIFY orelse Globals.CurrentAppUserIsSysAdmin() orelse String.Compare(Globals.CurrentAppUserID.toString, Fields!OWNERID, True) = 0)" CaptionResourceKey="$$move">
+							<c:ExecuteCLRAction>
+								<c:ScriptIdentifier Url="browser/htmlforms/platform/informationlibrary/QueryMoveCategoryAction.js" ObjectName="BBUI.customactions.platform.informationlibrary.QueryMoveCategoryAction">
+									<c:AllowsMultiSelect />
+								</c:ScriptIdentifier>
+								<c:ActionContext>
+									<c:SectionField>ID</c:SectionField>
+								</c:ActionContext>
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>C3B173FA-9697-403C-9008-8EF5A4B34F60</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+							</c:ExecuteCLRAction>
+						</Action>
+						<Action ID="CE9EB9CA-8175-478E-A6BC-3218E25AA79A" Caption="Add an ad-hoc query" ImageKey="RES:NewItem" ToolTipText="Creates a new ad-hoc query." CaptionResourceKey="$$add_an_ad-hoc_query" ToolTipResourceKey="$$creates_a_new_ad-hoc_query">
+							<c:ExecuteCLRAction>
+								<c:ScriptIdentifier Url="browser/htmlforms/platform/query/AdHocQueryNewAction.js" ObjectName="BBUI.customactions.platform.query.AdHocQueryNewAction" />
+								<c:PostActionEvent>
+									<c:GoToPage>
+												<c:SpecificPage PageID="27cf8c30-fbc2-43db-8cd2-9339028d3a68" />
+									</c:GoToPage>
+								</c:PostActionEvent>
+							</c:ExecuteCLRAction>
+							<HelpKey>DATAQueryCreatingAdHoc.html</HelpKey>
+						</Action>
+						<Action ID="629CC459-17F9-4BE1-976D-CC62AD35B9D3" Caption="Add a smart query" ImageKey="RES:NewItem" ToolTipText="Creates a new smart query instance." CaptionResourceKey="$$add_a_smart_query" ToolTipResourceKey="$$creates_a_new_smart_query_instance">
+							<c:ExecuteCLRAction>
+								<c:ScriptIdentifier Url="browser/htmlforms/platform/query/SmartQueryNewAction.js" ObjectName="BBUI.customactions.platform.query.SmartQueryNewAction" />
+								<c:PostActionEvent>
+									<c:GoToPage>
+												<c:SpecificPage PageID="19546f2a-4b54-476a-a4e9-8fad1f933f29" />
+									</c:GoToPage>
+								</c:PostActionEvent>
+							</c:ExecuteCLRAction>
+							<HelpKey>DATAQueryCreateSmart.html</HelpKey>
+						</Action>
+						<Action ID="9E0B6D6D-EACE-4FAE-AA68-D58BF2A986D1" Caption="Edit" ImageKey="RES:edit" Visible="=Fields!QUERY_TYPE = 0" ToolTipText="Opens the currently selected ad-hoc query for editing" Enabled="=Fields!USERCANEDIT" CaptionResourceKey="$$edit" ToolTipResourceKey="$$opens_the_currently_selected_ad-hoc_query_for_editing">
+							<c:ExecuteCLRAction>
+								<c:ScriptIdentifier Url="browser/htmlforms/platform/query/AdHocQueryEditAction.js" ObjectName="BBUI.customactions.platform.query.AdHocQueryEditAction" />
+								<c:PostActionEvent>
+									<c:GoToPage>
+										<c:SpecificPage PageID="27cf8c30-fbc2-43db-8cd2-9339028d3a68" />
+									</c:GoToPage>
+								</c:PostActionEvent>
+							</c:ExecuteCLRAction>
+							<HelpKey>DATAQueryEdit.html</HelpKey>
+						</Action>
+						<Action ID="957BA74D-64EC-4B01-ACA0-742802887E54" Caption="Edit" ImageKey="RES:edit" Visible="=Fields!QUERY_TYPE = 1" ToolTipText="Opens the currently selected smart query instance for editing." Enabled="=(Fields!OTHERSCANMODIFY orelse Globals.CurrentAppUserIsSysAdmin() orelse String.Compare(Globals.CurrentAppUserID.toString, Fields!OWNERID, True) = 0)" CaptionResourceKey="$$edit" ToolTipResourceKey="$$opens_the_currently_selected_smart_query_instance_for_editing">
+							<c:ShowDataForm DataFormID="eacb8907-9771-4520-8e17-63441c59c7ab">
+								<c:ActionContext>
+									<c:SectionField>ID</c:SectionField>
+								</c:ActionContext>
+								<c:PostActionEvent>
+									<c:GoToPage>
+										<c:SpecificPage PageID="19546f2a-4b54-476a-a4e9-8fad1f933f29">
+											<c:ActionContext>
+												<c:SectionField>ID</c:SectionField>
+											</c:ActionContext>
+										</c:SpecificPage>
+									</c:GoToPage>
+								</c:PostActionEvent>
+							</c:ShowDataForm>
+							<HelpKey>DATAQueryEdit.html</HelpKey>
+						</Action>
+						<Action ID="B7F1BAE7-806B-42CF-BDC1-D39D7C7194B1" Caption="Copy" ImageKey="RES:copy" Visible="=Fields!QUERY_TYPE = 0" ToolTipText="Creates a copy of the currently selected ad-hoc query." CaptionResourceKey="$$copy" ToolTipResourceKey="$$creates_a_copy_of_the_currently_selected_ad-hoc_query">
+							<c:ExecuteCLRAction>
+								<c:ScriptIdentifier Url="browser/htmlforms/platform/query/AdHocQueryCopyAction.js" ObjectName="BBUI.customactions.platform.query.AdHocQueryCopyAction" />
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>C3B173FA-9697-403C-9008-8EF5A4B34F60</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+							</c:ExecuteCLRAction>
+							<HelpKey>DATAQueryCopy.html</HelpKey>
+						</Action>
+						<Action ID="A413A902-CA59-4D4A-B632-1D9D105945A7" Caption="Copy" ImageKey="RES:copy" Visible="=Fields!QUERY_TYPE = 1" ToolTipText="Creates a copy of the currently selected smart query." CaptionResourceKey="$$copy" ToolTipResourceKey="$$creates_a_copy_of_the_currently_selected_smart_query">
+							<c:ShowAddDataForm DataFormID="6F0FF0B3-00A1-440F-A4E2-420F75B74083">
+								<c:ActionContext>
+									<c:SectionField>ID</c:SectionField>
+								</c:ActionContext>
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>C3B173FA-9697-403C-9008-8EF5A4B34F60</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+							</c:ShowAddDataForm>
+						</Action>
+						<Action ID="476F459C-D800-40C2-8CD2-8701FEB823E6" Caption="Merge" ImageKey="RES:mergetaskspec" Visible="=Fields!QUERY_TYPE = 0 AndAlso Globals.CurrentAppUserGrantedForm(&quot;76bb232a-aff5-4ebd-8e30-71083baa6530&quot;)" ToolTipText="Creates a merge using the currently selected ad-hoc query." Enabled="=Fields!QUERY_TYPE = 0 AndAlso Fields!USERCANEDIT" CaptionResourceKey="$$merge" ToolTipResourceKey="$$creates_a_merge_using_the_currently_selected_ad-hoc_query">
+							<c:ExecuteCLRAction>
+								<c:ScriptIdentifier Url="browser/htmlforms/platform/query/AdHocQueryMergeAction.js" ObjectName="BBUI.customactions.platform.query.AdHocQueryMergeAction" />
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>C3B173FA-9697-403C-9008-8EF5A4B34F60</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+							</c:ExecuteCLRAction>
+						</Action>
+						<Action ID="85B2202A-C38A-41C3-B53F-F5BE77DA84BA" Visible="=Fields!QUERY_TYPE = 0" Caption="=IIf(Fields!MOBILIZE, Me.Globals.GetResourceString(&quot;AdHocQueries_UndoMobilize&quot;), Me.Globals.GetResourceString(&quot;AdHocQueries_Mobilize&quot;))" ImageKey="RES:recordoperationspec" ToolTipText="Turns on or off the ability to view this query's results on a mobile device." Enabled="=Fields!QUERY_TYPE = 0 AndAlso Fields!USERCANEDIT" ToolTipResourceKey="$$turns_on_or_off_the_ability_to_view_this_query's_results_on_a_mobile_device">
+							<c:ExecuteRecordOperation RecordOperationID="b3749189-171b-482f-aea9-655b7f178cc5">
+								<c:ActionContext>
+									<c:SectionField>ID</c:SectionField>
+								</c:ActionContext>
+								<c:PostActionEvent>
+									<c:RefreshSection />
+								</c:PostActionEvent>
+							</c:ExecuteRecordOperation>
+							<HelpKey>DATAQueryMobilize.html</HelpKey>
+						</Action>
+						<Action ID="349B9E35-F7EE-4D90-9D49-F14B9FC53DD1" Visible="=Fields!QUERY_TYPE = 1" Caption="=IIf(Fields!MOBILIZE, Me.Globals.GetResourceString(&quot;AdHocQueries_UndoMobilize&quot;), Me.Globals.GetResourceString(&quot;AdHocQueries_Mobilize&quot;))" ImageKey="RES:recordoperationspec" ToolTipText="Turns on or off the ability to view this query's results on a mobile device." ToolTipResourceKey="$$turns_on_or_off_the_ability_to_view_this_query's_results_on_a_mobile_device">
+							<c:ExecuteRecordOperation RecordOperationID="e3dd17fa-785d-417d-902a-9583c32cccc9">
+								<c:ActionContext>
+									<c:SectionField>ID</c:SectionField>
+								</c:ActionContext>
+								<c:PostActionEvent>
+									<c:RefreshSection />
+								</c:PostActionEvent>
+							</c:ExecuteRecordOperation>
+							<HelpKey>DATAQueryMobilize.html</HelpKey>
+						</Action>
+						<Action ID="0548B06C-423D-47AF-9070-A773B63B4E54" Caption="Delete" Visible="=Fields!QUERY_TYPE = 0" ImageKey="RES:Delete" ToolTipText="Deletes the currently selected ad-hoc query." AppendSeparator="true" Enabled="=Fields!QUERY_TYPE = 0 AndAlso Fields!USERCANEDIT" CaptionResourceKey="$$delete" ToolTipResourceKey="$$deletes_the_currently_selected_ad-hoc_query">
+							<c:ExecuteCLRAction>
+								<c:ScriptIdentifier Url="browser/htmlforms/platform/query/AdHocQueryDeleteAction.js" ObjectName="BBUI.customactions.platform.query.AdHocQueryDeleteAction" />
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>C3B173FA-9697-403C-9008-8EF5A4B34F60</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+							</c:ExecuteCLRAction>
+							<HelpKey>DATAQueryDelete.html</HelpKey>
+						</Action>
+						<Action ID="D0D2DA36-6C3F-4BCF-9218-EB2051C8695D" Caption="Delete" Visible="=Fields!QUERY_TYPE = 1" ImageKey="RES:Delete" ToolTipText="Deletes the currently selected smart query instance." AppendSeparator="true" Enabled="=(Fields!OTHERSCANMODIFY orelse Globals.CurrentAppUserIsSysAdmin() orelse String.Compare(Globals.CurrentAppUserID.toString, Fields!OWNERID, True) = 0)" CaptionResourceKey="$$delete" ToolTipResourceKey="$$deletes_the_currently_selected_smart_query_instance">
+							<c:ExecuteRecordOperation RecordOperationID="be36dc0d-2f16-452e-9076-3ed5ffc0771e">
+								<c:ActionContext>
+									<c:SectionField>ID</c:SectionField>
+								</c:ActionContext>
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>C3B173FA-9697-403C-9008-8EF5A4B34F60</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+							</c:ExecuteRecordOperation>
+							<HelpKey>DATAQueryDelete.html</HelpKey>
+						</Action>
+						<Action ID="293E4D36-EB20-45EE-AA2E-54911059DB23" Caption="Browse" Visible="=Fields!QUERY_TYPE = 0" ImageKey="RES:browse" ToolTipText="Browses the ad-hoc query with a given page, starting with the first record returned by the query." Enabled="=Fields!ISBROWSABLE AndAlso Fields!QUERY_TYPE = 0" CaptionResourceKey="$$browse" ToolTipResourceKey="$$browses_the_ad-hoc_query_with_a_given_page,_starting_with_the_first_record_returned_by_the_query">
+							<c:ExecuteCLRAction>
+								<c:ScriptIdentifier Url="browser/htmlforms/platform/query/AdHocQueryBrowseAction.js" ObjectName="BBUI.customactions.platform.query.AdHocQueryBrowseAction" />
+							</c:ExecuteCLRAction>
+							<HelpKey>tkBrowseQueryRecords.html</HelpKey>
+						</Action>
+						<Action ID="756FCC76-2AE3-442F-AE8A-1F6BC257B41D" Caption="Browse" Visible="=Fields!QUERY_TYPE = 1" ImageKey="RES:browse" ToolTipText="Browses the smart query instance with a given page, starting with the first record returned by the query." Enabled="=Fields!ISBROWSABLE" CaptionResourceKey="$$browse" ToolTipResourceKey="$$browses_the_smart_query_instance_with_a_given_page,_starting_with_the_first_record_returned_by_the_query">
+							<c:ExecuteCLRAction>
+								<c:ScriptIdentifier Url="browser/htmlforms/platform/query/SmartQueryInstanceBrowseAction.js" ObjectName="BBUI.customactions.platform.query.SmartQueryInstanceBrowseAction" />
+							</c:ExecuteCLRAction>
+							<HelpKey>tkBrowseQueryRecords.html</HelpKey>
+						</Action>
+						<Action ID="D9D0748B-BB1C-469D-A709-2F030DFE60FF" Caption="Create" Visible="=Fields!QUERY_TYPE = 0" ImageKey="RES:NewItem" CaptionResourceKey="$$create">
+							<ActionGroup>
+								<Actions>
+									<Action ID="E8055EA3-BD41-41EE-B566-AEE80B4AA28E" Caption="Export" ImageKey="RES:NewItem" ToolTipText="Creates a new export business process based on the selected ad-hoc query." CaptionResourceKey="$$export" ToolTipResourceKey="$$creates_a_new_export_business_process_based_on_the_selected_ad-hoc_query">
+										<c:ShowAddDataForm DataFormID="a6e5db5f-ac3c-4893-ae74-ab819c134c59">
+											<c:ActionContext>
+												<c:SectionField>ID</c:SectionField>
+											</c:ActionContext>
+											<c:PostActionEvent>
+												<c:GoToPage>
+													<c:SpecificPage PageID="6ce66577-c6f9-47f3-8aa0-ab19a490cce3" />
+												</c:GoToPage>
+											</c:PostActionEvent>
+										</c:ShowAddDataForm>
+										<HelpKey>DATAQueryExportQueries.html</HelpKey>
+									</Action>
+									<Action ID="51F929BC-F11A-4057-9E0C-AA0D1203A32D" Caption="Smart query" ImageKey="res:smartqueryspec" Visible="=Globals.CurrentAppUserGrantedSystemPrivilege(&quot;4406B25F-5E7B-4F46-9ADB-25FFFA8D407C&quot;)" CaptionResourceKey="$$smart_query">
+										<c:ExecuteCLRAction>
+											<c:ScriptIdentifier Url="browser/htmlforms/platform/query/AdHocQueryCreateSmartQueryAddAction.js" ObjectName="BBUI.customactions.platform.query.AdHocQueryCreateSmartQueryAddAction" />
+											<c:PostActionEvent>
+												<c:RefreshSection />
+											</c:PostActionEvent>
+										</c:ExecuteCLRAction>
+                    <HelpKey>DATASmartQueryAdHoc.html</HelpKey>
+									</Action>
+									<Action ID="E65A23C3-137D-462A-9E00-77C8EF53EA14" Caption="Task" ImageKey="res:taskspec" CaptionResourceKey="$$task">
+										<c:ShowAddDataForm DataFormID="ecbc61a0-cb4a-4a35-bd04-fc7a2c2b086a">
+											<c:ActionContext>
+												<c:SectionField>ID</c:SectionField>
+											</c:ActionContext>
+										</c:ShowAddDataForm>
+										<HelpKey>ADMAddTaskPropScr.html</HelpKey>
+									</Action>
+									<Action ID="2D149B0D-22CC-480E-BD07-A163C594AC13" Caption="Data list" ImageKey="res:datalistspec" Visible="=Globals.CurrentAppUserGrantedSystemPrivilege(&quot;D02B9CBE-6DA9-4494-BDB5-3127339409E4&quot;)" CaptionResourceKey="$$data_list">
+										<c:ExecuteCLRAction>
+											<c:ScriptIdentifier Url="browser/htmlforms/platform/query/AdHocQueryCreateDataListAddAction.js" ObjectName="BBUI.customactions.platform.query.AdHocQueryCreateDataListAddAction" />
+											<c:PostActionEvent>
+												<c:RefreshSection />
+											</c:PostActionEvent>
+										</c:ExecuteCLRAction>
+                    <HelpKey>DATAQueryCreateDataList.html</HelpKey>
+									</Action>
+									<Action ID="64BC76EF-AF45-4AC3-A3B2-96AE30963FAA" Caption="Report" ImageKey="res:reportspec" Visible="=Globals.CurrentAppUserGrantedSystemPrivilege(&quot;454C2312-2817-4c5b-8358-567382C1A263&quot;)" CaptionResourceKey="$$report">
+										<c:ExecuteCLRAction>
+											<c:ScriptIdentifier Url="browser/htmlforms/platform/query/AdHocQueryCreateReportAddAction.js" ObjectName="BBUI.customactions.platform.query.AdHocQueryCreateReportAddAction" />
+											<c:PostActionEvent>
+												<c:RefreshSection />
+											</c:PostActionEvent>
+										</c:ExecuteCLRAction>
+                    <HelpKey>DATAReportAdHoc.html</HelpKey>
+									</Action>
+								</Actions>
+							</ActionGroup>
+						</Action>
+						<Action ID="0377CD04-6519-4BA2-8167-83CF693D3FA0" Caption="Create" Visible="=Fields!QUERY_TYPE = 1" ImageKey="RES:NewItem" CaptionResourceKey="$$create">
+							<ActionGroup>
+								<Actions>
+									<Action ID="B38C24D6-1BC0-4ABF-8ED7-BB4EA098ED93" Caption="Export" ImageKey="RES:NewItem" ToolTipText="Creates a new export business process based on the selected smart query instance." CaptionResourceKey="$$export" ToolTipResourceKey="$$creates_a_new_export_business_process_based_on_the_selected_smart_query_instance">
+										<c:ShowAddDataForm DataFormID="0BA0F84E-12A8-4E47-8F31-D92680847E28">
+											<c:ActionContext>
+												<c:SectionField>ID</c:SectionField>
+											</c:ActionContext>
+											<c:PostActionEvent>
+												<c:GoToPage>
+													<c:SpecificPage PageID="6ce66577-c6f9-47f3-8aa0-ab19a490cce3">
+														<c:ActionContext />
+													</c:SpecificPage>
+												</c:GoToPage>
+											</c:PostActionEvent>
+										</c:ShowAddDataForm>
+										<HelpKey>DATAQueryExportQueries.html</HelpKey>
+									</Action>
+									<Action ID="CAEFA1E3-22AF-41A0-8FB7-18CC0B44BF56" Caption="Task" ImageKey="res:taskspec" CaptionResourceKey="$$task">
+										<c:ShowAddDataForm DataFormID="742feca3-2f42-457b-bee9-a640f851de8a">
+											<c:ActionContext>
+												<c:SectionField>ID</c:SectionField>
+											</c:ActionContext>
+										</c:ShowAddDataForm>
+										<HelpKey>ADMAddTaskPropScr.html</HelpKey>
+									</Action>
+								</Actions>
+							</ActionGroup>
+						</Action>
+						<Action ID="940EF646-6C0E-498C-BC59-D89C1A1087A2" Caption="View exports" ImageKey="CATALOG:Blackbaud.AppFx.Platform.Catalog,Blackbaud.AppFx.Platform.Catalog.export_16_3.png" AppendSeparator="true" Visible="=Globals.CurrentAppUserGrantedQueryView(&quot;01e90232-9809-4433-9308-fcfd83de1a36&quot;)" CaptionResourceKey="$$view_exports">
+							<c:ShowPage PageID="A523FE5F-8949-463E-B965-3AD53CD08214">
+								<c:ActionContext>
+									<c:SectionField>ID</c:SectionField>
+								</c:ActionContext>
+							</c:ShowPage>
+						</Action>
+						<Action ID="8D0C848A-9897-4368-93E6-02345C28758A" Caption="Properties" Visible="=Fields!QUERY_TYPE = 0" ShowCaptionOnToolbar="false" ImageKey="RES:properties" CaptionResourceKey="$$properties">
+							<c:ExecuteCLRAction>
+								<c:ScriptIdentifier Url="browser/htmlforms/platform/query/AdHocQueryPropertiesAction.js" ObjectName="BBUI.customactions.platform.query.AdHocQueryPropertiesAction" />
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>C3B173FA-9697-403C-9008-8EF5A4B34F60</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+							</c:ExecuteCLRAction>
+							<HelpKey>DATAQueryPropertiesScreen.html</HelpKey>
+						</Action>
+						<Action ID="28A81C8A-2DAC-4D39-BE75-E405AB2073B0" Caption="Properties" Visible="=Fields!QUERY_TYPE = 1" ShowCaptionOnToolbar="false" ImageKey="RES:properties" CaptionResourceKey="$$properties">
+							<c:ExecuteCLRAction>
+								<c:ScriptIdentifier Url="browser/htmlforms/platform/query/SmartQueryPropertiesAction.js" ObjectName="BBUI.customactions.platform.query.SmartQueryPropertiesAction" />
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>C3B173FA-9697-403C-9008-8EF5A4B34F60</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+							</c:ExecuteCLRAction>
+							<HelpKey>DATAQueryPropertiesScreen.html</HelpKey>
+						</Action>
+						<Action ID="A87E00FD-0CEC-4066-9547-683A9D7732D4" Caption="Assign permissions" ShowCaptionOnToolbar="false" ImageKey="RES:usersfolder" Enabled="=(Globals.CurrentAppUserIsSysAdmin() OrElse (String.Compare(Globals.CurrentAppUserID.toString, Fields!OWNERID, True) = 0))" Visible="=Fields!QUERY_TYPE = 0" CaptionResourceKey="$$assign_permissions">
+							<c:ShowDataForm DataFormID="7CE0F5B6-9AC4-4fc2-AABB-AD59E2A66FF9">
+								<c:ActionContext>
+									<c:SectionField>ID</c:SectionField>
+								</c:ActionContext>
+							</c:ShowDataForm>
+							<HelpKey>PDAssignFeaturePerm.html</HelpKey>
+						</Action>
+						<Action ID="976AF93D-1AB8-4EF0-950C-2A709E036492" Caption="Assign permissions" ShowCaptionOnToolbar="false" ImageKey="RES:usersfolder" Enabled="=(Globals.CurrentAppUserIsSysAdmin() OrElse (String.Compare(Globals.CurrentAppUserID.toString, Fields!OWNERID, True) = 0))" Visible="=Fields!QUERY_TYPE = 1" CaptionResourceKey="$$assign_permissions">
+							<c:ShowDataForm DataFormID="697d762b-ee48-448c-af70-6fa127f19ae8">
+								<c:ActionContext>
+									<c:SectionField>ID</c:SectionField>
+								</c:ActionContext>
+							</c:ShowDataForm>
+							<HelpKey>PDAssignFeaturePerm.html</HelpKey>
+						</Action>
+					</Actions>
+					<HelpKey>DATAQueryAdHocQueries.html</HelpKey>
+				</Section>
+			</Sections>
+		</Tab>
+
+		<Tab ID="0E836206-8C67-49DC-8444-81EB6AE1898D" Caption="KPIs" LayoutUrl="browser/htmlforms/platform/informationlibrary/informationlibrarykpislayout.html" CaptionResourceKey="$$kpis">
+			<Sections>
+				<Section ID="0DCD8081-F850-4AB1-95A9-D5BCF802A98B" HideRefresh="true" Caption="KPIs" HideCaption="true" CaptionResourceKey="$$kpis">
+					<UIWidget ID="53a8c75f-eb41-4fda-b8aa-710df6fd71d1" AutoHeight="true" />
+					<Actions>
+						<Action ID="95163A99-7CA4-4969-8CB4-9F4A43C51DF8" Caption="Manage folders" ImageKey="CATALOG:Blackbaud.AppFx.Platform.Catalog,Blackbaud.AppFx.Platform.Catalog.folder_gear_16.png" CaptionResourceKey="$$manage_folders">
+							<c:ShowDataForm DataFormID="63a67cd2-b78b-44f0-b5fb-4b40e4bfe0d0">
+								<c:PostActionEvent>
+									<c:RefreshPage />
+								</c:PostActionEvent>
+							</c:ShowDataForm>
+						</Action>
+					</Actions>
+				</Section>
+				
+				<Section ID="D5E9896B-0619-4123-9B2C-64E3230D6578" Caption="KPIs" CaptionResourceKey="$$kpis">
+					<ListBuilder QueryViewID="CB3D8B9D-4865-4EE8-8F4F-F13FF8E597F1" AutoDisplayFilters="true" AllowCancel="true" AllowSave="false">
+						<RequiredColumns>
+							<Column Name="KPIINSTANCEID" />
+							<Column Name="CONTEXTRECORDTYPE" />
+							<Column Name="USERHASRIGHTSTOKPI" />
+              <Column Name="ISFAVORITE" />
+							<Column Name="GROUPEDBY" />
+						</RequiredColumns>
+						<RenderStyle>
+							<StandardView>
+								<DetailViewForm HeaderCaption="= Fields!NAME" RecordIDField="KPIINSTANCEID" ViewDataFormID="a9629dd4-0b5b-4691-8d83-15742c12a20d" />
+							</StandardView>
+						</RenderStyle>
+						<ParameterSection ID="0DCD8081-F850-4AB1-95A9-D5BCF802A98B">
+							<FieldMappings>
+								<FieldMapping>
+									<ParameterField>NODEID</ParameterField>
+									<DestinationField>NODEID</DestinationField>
+								</FieldMapping>
+								<FieldMapping>
+									<ParameterField>GROUPBY</ParameterField>
+									<DestinationField>GROUPBY</DestinationField>
+								</FieldMapping>
+							</FieldMappings>
+						</ParameterSection>
+					</ListBuilder>
+					<Actions>
+						<Action AppendSeparator="true" Caption="Go to KPI" DefaultAction="true" ID="a96a8782-f0d1-41be-a492-6acffa5aa434" ImageKey="res:goto_round" LinkFieldID="NAME" CaptionResourceKey="$$go_to_kpi">
+							<c:ShowPage PageID="a3d45719-d44f-40dd-9db7-25f23cfe8f17">
+								<c:ActionContext>
+									<c:SectionField>KPIINSTANCEID</c:SectionField>
+								</c:ActionContext>
+							</c:ShowPage>
+						</Action>
+						<Action AppendSeparator="true" ID="761ec865-9869-4230-82c5-5d34249cac7c" Caption="Update KPI value" ImageKey="RES:businessprocessspec" Enabled="= Fields!USERHASRIGHTSTOKPI" CaptionResourceKey="$$update_kpi_value">
+							<c:StartBusinessProcess BusinessProcessID="ec9c5403-d3bb-43d4-a667-c452aa360771" StatusPageID="a3d45719-d44f-40dd-9db7-25f23cfe8f17" StatusTabID="6ebac887-649c-4ff5-aa6d-49e99d80a28e">
+								<c:ActionContext>
+									<c:SectionField>KPIINSTANCEID</c:SectionField>
+								</c:ActionContext>
+							</c:StartBusinessProcess>
+						</Action>
+						<Action ID="2D3CE790-5A25-492C-A92F-03EC79AE52C1" Caption="Move" ImageKey="RES:recordoperationspec" Visible="=Fields!GROUPEDBY=0" Enabled="= Fields!USERHASRIGHTSTOKPI" CaptionResourceKey="$$move">
+							<c:ExecuteCLRAction>
+								<c:ScriptIdentifier Url="browser/htmlforms/platform/informationlibrary/KPIMoveFolderAction.js" ObjectName="BBUI.customactions.platform.informationlibrary.KPIMoveFolderAction">
+									<c:AllowsMultiSelect />
+								</c:ScriptIdentifier>
+								<c:ActionContext>
+									<c:SectionField>KPIINSTANCEID</c:SectionField>
+								</c:ActionContext>
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>0DCD8081-F850-4AB1-95A9-D5BCF802A98B</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+							</c:ExecuteCLRAction>
+						</Action>
+						<Action Caption="Add" ID="86641241-2d12-4d4c-818f-c26cc80437ca" ImageKey="res:newitem" Visible="= String.IsNullOrEmpty(Page.Fields!ContextRecordName)" CaptionResourceKey="$$add">
+							<c:ExecuteCLRAction>
+								<c:ComponentIdentifier AssemblyName="Blackbaud.AppFx.Browser.exe" ClassName="Blackbaud.AppFx.Browser.Actions.KpiInstanceNewAction" />
+								<c:ScriptIdentifier ObjectName="BBUI.customactions.platform.kpi.KpiInstanceNewAction" Url="browser/htmlforms/platform/kpi/KpiInstanceNewAction.js" />
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>0DCD8081-F850-4AB1-95A9-D5BCF802A98B</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+							</c:ExecuteCLRAction>
+						</Action>
+						<Action Caption="Add" ID="fc452d2e-b47c-48e0-b14a-fd43472b8bea" ImageKey="res:newitem" Visible="= Not String.IsNullOrEmpty(Page.Fields!ContextRecordName)" CaptionResourceKey="$$add">
+							<c:ExecuteCLRAction>
+								<c:ComponentIdentifier AssemblyName="Blackbaud.AppFx.Browser.exe" ClassName="Blackbaud.AppFx.Browser.Actions.KpiInstanceNewAction" />
+								<c:ScriptIdentifier ObjectName="BBUI.customactions.platform.kpi.KpiInstanceNewAction" Url="browser/htmlforms/platform/kpi/KpiInstanceNewAction.js" />
+								<c:ActionContext>
+									<c:PageContextID />
+								</c:ActionContext>
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>0DCD8081-F850-4AB1-95A9-D5BCF802A98B</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+							</c:ExecuteCLRAction>
+              <HelpKey>DATAAddKPIinstancesScreen.html</HelpKey>
+						</Action>
+						<Action Caption="Edit" ID="f27e8681-d982-4dae-aa58-c6bad68f629d" ImageKey="res:edit" Enabled="= Fields!USERHASRIGHTSTOKPI" CaptionResourceKey="$$edit">
+							<c:ExecuteCLRAction>
+								<c:ComponentIdentifier AssemblyName="Blackbaud.AppFx.Browser.exe" ClassName="Blackbaud.AppFx.Browser.Actions.KpiInstanceOpenAction" />
+								<c:ScriptIdentifier ObjectName="BBUI.customactions.platform.kpi.KpiInstanceEditAction" Url="browser/htmlforms/platform/kpi/KpiInstanceEditAction.js" />
+								<c:ActionContext>
+									<c:SectionField>KPIINSTANCEID</c:SectionField>
+								</c:ActionContext>
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>0DCD8081-F850-4AB1-95A9-D5BCF802A98B</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+							</c:ExecuteCLRAction>
+						</Action>
+						<Action ID="ba02dbf7-d3ce-4113-b03b-9ae386aa0232" Caption="Copy" ImageKey="RES:copy" Enabled="= Fields!USERHASRIGHTSTOKPI" CaptionResourceKey="$$copy">
+							<c:ShowAddDataForm DataFormID="E376DDE7-A546-4B4F-ADB3-29D3807599B6">
+								<c:ActionContext>
+									<c:SectionField>KPIINSTANCEID</c:SectionField>
+								</c:ActionContext>
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>0DCD8081-F850-4AB1-95A9-D5BCF802A98B</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+							</c:ShowAddDataForm>
+						</Action>
+						<Action ID="f0b1988a-ad30-4dd8-94ef-bb42acc3b31c" Caption="Delete" ImageKey="RES:Delete" AppendSeparator="true" Enabled="= Fields!USERHASRIGHTSTOKPI" CaptionResourceKey="$$delete">
+							<c:ExecuteRecordOperation RecordOperationID="92743043-9ef2-4dc9-9b52-34806a3ed812">
+								<c:ActionContext>
+									<c:SectionField>KPIINSTANCEID</c:SectionField>
+								</c:ActionContext>
+								<c:PostActionEvent>
+									<c:RefreshOtherSections>
+										<c:Sections>
+											<c:SectionID>0DCD8081-F850-4AB1-95A9-D5BCF802A98B</c:SectionID>
+										</c:Sections>
+									</c:RefreshOtherSections>
+								</c:PostActionEvent>
+								<c:AllowsMultiSelect>
+									<c:Prompt PromptResourceKey="$$are_you_sure_you_want_to_delete_the_selected_kpi(s)?">Are you sure you want to delete the selected KPI(s)?</c:Prompt>
+								</c:AllowsMultiSelect>
+							</c:ExecuteRecordOperation>
+						</Action>
+						<Action ID="058B87AF-910F-4AB2-8C92-310E8B7B6DA0" Caption="Assign permissions" ImageKey="RES:usersfolder" CaptionResourceKey="$$assign_permissions">
+							<c:ShowDataForm DataFormID="780dfd59-ba66-4618-bcdd-6c19df42f892">
+								<c:ActionContext>
+									<c:SectionField>KPIINSTANCEID</c:SectionField>
+								</c:ActionContext>
+							</c:ShowDataForm>
+						</Action>
+            <Action ID="7BC62E80-644E-43F3-8FA6-6DE779589465" Caption="Favorite" LinkFieldID="FAVORITEPIC" CaptionResourceKey="$$favorite">
+              <c:ExecuteRecordOperation RecordOperationID="8ff79ce2-700f-43fb-9aa2-706bf0f5c9a5">
+                <c:ActionContext>
+                  <c:SectionField>KPIINSTANCEID</c:SectionField>
+                </c:ActionContext>
+                <c:ParameterValues>
+                  <c:ParameterValue ID="FAVORITE">
+                    <c:Value>
+                      <c:SectionField>ISFAVORITE</c:SectionField>
+                    </c:Value>
+                  </c:ParameterValue>
+                </c:ParameterValues>
+                <c:PostActionEvent>
+					        <c:RefreshOtherSections>
+						        <c:Sections>
+											<c:SectionID>0DCD8081-F850-4AB1-95A9-D5BCF802A98B</c:SectionID>
+						        </c:Sections>
+					        </c:RefreshOtherSections>
+                </c:PostActionEvent>
+                </c:ExecuteRecordOperation>
+            </Action>
+					</Actions>
+				</Section>
+			</Sections>
+		</Tab>
+	</Tabs>
+
+	<PageActionGroups>
+		<PageActionGroup ID="3B7ED296-9B63-43C1-BBA2-E3D7883D7C80" Caption="KPI" ImageKey="RES:kpi" CaptionResourceKey="$$kpi">
+			<Actions>
+				<Action ID="22BA0A4F-0888-4973-A5FF-FF56D7D02073" Caption="Import KPI definition" Visible="= Globals.CurrentAppUserGrantedForm(&quot;3f5787f9-28d9-4b74-9325-6cabf4c961cb&quot;)" ImageKey="RES:xmlfile" ToolTipText="Import KPI definition from XML" CaptionResourceKey="$$import_kpi_definition" ToolTipResourceKey="$$import_kpi_definition_from_xml">
+					<c:ShowAddDataForm DataFormID="3f5787f9-28d9-4b74-9325-6cabf4c961cb">
+						<c:PostActionEvent>
+							<c:GoToPage>
+								<c:SpecificPage PageID="a5b552bc-d387-47a3-8c35-e36cc2f1af4e" TabID="0E836206-8C67-49DC-8444-81EB6AE1898D" />
+							</c:GoToPage>
+						</c:PostActionEvent>
+					</c:ShowAddDataForm>
+				</Action>
+			</Actions>			
+		</PageActionGroup>
+	</PageActionGroups>
+
+  <HelpKey>DATAInformationLibrary.html</HelpKey>
+
+</PageDefinitionSpec>
